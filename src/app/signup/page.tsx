@@ -28,17 +28,28 @@ export default function SignUp() {
       return
     }
 
-    // profiles 테이블에 닉네임 저장
-    if (data.user) {
-      const { error: profileError } = await supabase.from('profiles').insert({
-        user_id: data.user.id,
-        nickname,
+    // 세션을 명시적으로 설정 (signUp 직후 RLS 통과를 위해 필요)
+    if (data.session) {
+      await supabase.auth.setSession({
+        access_token: data.session.access_token,
+        refresh_token: data.session.refresh_token,
       })
+    }
 
-      if (profileError) {
-        setMessage('프로필 저장 오류: ' + profileError.message)
-        return
-      }
+    if (!data.user) {
+      setMessage('가입 확인 이메일을 발송했습니다. 이메일을 확인해주세요.')
+      return
+    }
+
+    // profiles 테이블에 닉네임 저장
+    const { error: profileError } = await supabase.from('profiles').insert({
+      user_id: data.user.id,
+      nickname,
+    })
+
+    if (profileError) {
+      setMessage('프로필 저장 오류: ' + profileError.message)
+      return
     }
 
     setMessage('가입 완료. 메인 페이지로 이동합니다.')
