@@ -30,10 +30,15 @@ export default function SignUp() {
 
     // profiles 테이블에 닉네임 저장
     if (data.user) {
-      await supabase.from('profiles').insert({
-        id: data.user.id,
+      const { error: profileError } = await supabase.from('profiles').insert({
+        user_id: data.user.id,
         nickname,
       })
+
+      if (profileError) {
+        setMessage('프로필 저장 오류: ' + profileError.message)
+        return
+      }
     }
 
     setMessage('가입 완료. 메인 페이지로 이동합니다.')
