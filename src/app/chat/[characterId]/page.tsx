@@ -1,10 +1,11 @@
-import { supabase } from '@/utils/supabase'
+import { createClient } from '@/utils/supabase/server'
 import Link from 'next/link'
 import { notFound } from 'next/navigation'
 import ChatInput from '../ChatInput'
 
 export default async function Chat({ params }: { params: Promise<{ characterId: string }> }) {
   const { characterId } = await params
+  const supabase = await createClient()
   const { data: { user } } = await supabase.auth.getUser()
 
   if (!user) {
