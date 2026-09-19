@@ -29,7 +29,6 @@ export default function SignUp() {
       return
     }
 
-    // 세션을 명시적으로 설정 (signUp 직후 RLS 통과를 위해 필요)
     if (data.session) {
       await supabase.auth.setSession({
         access_token: data.session.access_token,
@@ -42,7 +41,6 @@ export default function SignUp() {
       return
     }
 
-    // profiles 테이블에 닉네임 저장
     const { error: profileError } = await supabase.from('profiles').insert({
       user_id: data.user.id,
       nickname,
@@ -58,37 +56,46 @@ export default function SignUp() {
   }
 
   return (
-    <main className="p-8 max-w-md mx-auto">
-      <h1 className="text-2xl font-bold mb-4">회원가입</h1>
-      <form onSubmit={handleSignUp} className="space-y-4">
-        <input
-          type="text" placeholder="닉네임" required
-          value={nickname} onChange={(e) => setNickname(e.target.value)}
-          className="border p-2 w-full rounded"
-        />
-        <input
-          type="email" placeholder="이메일" required
-          value={email} onChange={(e) => setEmail(e.target.value)}
-          className="border p-2 w-full rounded"
-        />
-        <input
-          type="password" placeholder="비밀번호 (6자 이상)" required
-          value={password} onChange={(e) => setPassword(e.target.value)}
-          className="border p-2 w-full rounded"
-        />
-        <input
-          type="password" placeholder="비밀번호 확인" required
-          value={confirmPassword} onChange={(e) => setConfirmPassword(e.target.value)}
-          className="border p-2 w-full rounded"
-        />
-        <button type="submit" className="bg-black text-white px-4 py-2 rounded w-full">
-          가입하기
-        </button>
-      </form>
-      {message && <p className="mt-4 text-sm">{message}</p>}
-      <p className="mt-4 text-sm">
-        이미 계정이 있나요? <a href="/login" className="underline">로그인</a>
-      </p>
-    </main>
+    <div className="flex items-center justify-center min-h-screen p-8">
+      <div className="w-full max-w-sm">
+        <div className="text-center mb-8">
+          <div className="text-5xl mb-3">⚜️</div>
+          <h1 className="text-2xl font-bold">회원가입</h1>
+          <p className="text-gray-400 mt-1">역사 인물과 대화를 시작하세요</p>
+        </div>
+
+        <form onSubmit={handleSignUp} className="space-y-4">
+          <input
+            type="text" placeholder="닉네임" required
+            value={nickname} onChange={(e) => setNickname(e.target.value)}
+            className="w-full px-4 py-3 rounded-xl border-2 border-gray-200 bg-gray-50 focus:border-accent focus:bg-white outline-none transition-colors"
+          />
+          <input
+            type="email" placeholder="이메일" required
+            value={email} onChange={(e) => setEmail(e.target.value)}
+            className="w-full px-4 py-3 rounded-xl border-2 border-gray-200 bg-gray-50 focus:border-accent focus:bg-white outline-none transition-colors"
+          />
+          <input
+            type="password" placeholder="비밀번호 (6자 이상)" required
+            value={password} onChange={(e) => setPassword(e.target.value)}
+            className="w-full px-4 py-3 rounded-xl border-2 border-gray-200 bg-gray-50 focus:border-accent focus:bg-white outline-none transition-colors"
+          />
+          <input
+            type="password" placeholder="비밀번호 확인" required
+            value={confirmPassword} onChange={(e) => setConfirmPassword(e.target.value)}
+            className="w-full px-4 py-3 rounded-xl border-2 border-gray-200 bg-gray-50 focus:border-accent focus:bg-white outline-none transition-colors"
+          />
+          <button type="submit" className="w-full bg-accent text-white py-3 rounded-xl font-medium hover:bg-accent-hover transition-colors shadow-lg">
+            가입하기
+          </button>
+        </form>
+
+        {message && <p className="mt-4 text-sm text-red-500 text-center">{message}</p>}
+
+        <p className="mt-6 text-sm text-center text-gray-500">
+          이미 계정이 있나요? <a href="/login" className="text-accent font-medium">로그인</a>
+        </p>
+      </div>
+    </div>
   )
 }

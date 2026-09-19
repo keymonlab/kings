@@ -26,19 +26,19 @@ export default function ChatInput({ conversationId }: { conversationId: string }
   }
 
   return (
-    <form onSubmit={handleSubmit} className="flex gap-2 mt-4">
+    <form onSubmit={handleSubmit} className="flex gap-3">
       <input
         type="text"
         value={content}
         onChange={(e) => setContent(e.target.value)}
         placeholder="질문을 입력하세요..."
-        className="border p-2 flex-1 rounded"
+        className="flex-1 px-4 py-3 rounded-xl border-2 border-gray-200 bg-gray-50 focus:border-accent focus:bg-white outline-none transition-colors"
         required
         disabled={sending}
       />
       <button
         type="submit"
-        className="bg-black text-white px-4 py-2 rounded"
+        className="bg-accent text-white px-6 py-3 rounded-xl font-medium hover:bg-accent-hover transition-colors disabled:opacity-50"
         disabled={sending}
       >
         전송

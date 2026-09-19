@@ -1,26 +1,94 @@
 @import "tailwindcss";
 
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  --background: #f8f9fc;
+  --foreground: #1a1a2e;
+  --sidebar-bg: #1e1e2f;
+  --sidebar-fg: #e0e0e8;
+  --accent: #6c5ce7;
+  --accent-hover: #5a4bd1;
+  --card-bg: #ffffff;
+  --card-shadow: 0 2px 8px rgba(0,0,0,0.06);
+  --card-hover-shadow: 0 4px 16px rgba(0,0,0,0.1);
+  --bubble-user: #6c5ce7;
+  --bubble-user-fg: #ffffff;
+  --bubble-other: #f1f3f8;
+  --radius-lg: 12px;
+  --radius-md: 8px;
 }
 
 @theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
+  --color-sidebar: var(--sidebar-bg);
+  --color-sidebar-fg: var(--sidebar-fg);
+  --color-accent: var(--accent);
+  --color-accent-hover: var(--accent-hover);
+  --color-card: var(--card-bg);
   --font-sans: var(--font-geist-sans);
   --font-mono: var(--font-geist-mono);
+  --radius-lg: var(--radius-lg);
+  --radius-md: var(--radius-md);
 }
 
 @media (prefers-color-scheme: dark) {
   :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
+    --background: #0f0f1a;
+    --foreground: #e8e8f0;
+    --sidebar-bg: #16162a;
+    --card-bg: #1a1a2e;
+    --card-shadow: 0 2px 8px rgba(0,0,0,0.2);
+    --bubble-other: #1e1e35;
   }
 }
 
 body {
   background: var(--background);
   color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  font-family: var(--font-sans, Arial, Helvetica, sans-serif);
+}
+
+/* Sidebar */
+.sidebar {
+  background: var(--sidebar-bg);
+  color: var(--sidebar-fg);
+  width: 240px;
+  min-height: 100vh;
+}
+
+/* Character card */
+.character-card {
+  background: var(--card-bg);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--card-shadow);
+  transition: box-shadow 0.2s ease, transform 0.2s ease;
+}
+.character-card:hover {
+  box-shadow: var(--card-hover-shadow);
+  transform: translateY(-2px);
+}
+
+/* Chat bubbles */
+.bubble-user {
+  background: var(--bubble-user);
+  color: var(--bubble-user-fg);
+  border-radius: var(--radius-lg) var(--radius-lg) 4px var(--radius-lg);
+}
+.bubble-other {
+  background: var(--bubble-other);
+  border-radius: var(--radius-lg) var(--radius-lg) var(--radius-lg) 4px;
+}
+
+/* Avatar placeholder */
+.avatar-placeholder {
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, var(--accent), #a29bfe);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  font-weight: 700;
+  font-size: 1.2rem;
 }

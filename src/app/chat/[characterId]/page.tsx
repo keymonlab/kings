@@ -9,7 +9,7 @@ export default async function Chat({ params }: { params: Promise<{ characterId: 
   const { data: { user } } = await supabase.auth.getUser()
 
   if (!user) {
-    return <p className="p-8">로그인이 필요합니다.</p>
+    return <div className="p-8 text-center text-gray-400">로그인이 필요합니다.</div>
   }
 
   const { data: character } = await supabase
@@ -22,7 +22,6 @@ export default async function Chat({ params }: { params: Promise<{ characterId: 
     notFound()
   }
 
-  // 대화 찾거나 새로 생성
   let { data: conversation } = await supabase
     .from('conversations')
     .select('*')
@@ -49,33 +48,50 @@ export default async function Chat({ params }: { params: Promise<{ characterId: 
     .from('messages')
     .select('*')
     .eq('conversation_id', conversation!.id)
-    .eq('role', 'user')
     .order('created_at', { ascending: true })
 
   return (
-    <main className="p-8 max-w-2xl mx-auto">
-      <div className="mb-6">
-        <Link href="/" className="text-sm underline">← 돌아가기</Link>
-        <h1 className="text-2xl font-bold mt-2">{character.name}</h1>
-        <p className="text-gray-500">{character.era} · {character.description}</p>
+    <div className="flex flex-col h-screen">
+      {/* Header */}
+      <div className="border-b bg-card px-6 py-4 flex items-center gap-4">
+        <Link href="/" className="text-gray-400 hover:text-gray-600 transition-colors">
+          ←
+        </Link>
+        <div className="flex items-center gap-3">
+          <div className="avatar-placeholder w-10 h-10 text-base">{character.name[0]}</div>
+          <div>
+            <h1 className="font-bold text-lg">{character.name}</h1>
+            <p className="text-xs text-gray-400">{character.era} · {character.description}</p>
+          </div>
+        </div>
       </div>
 
-      <div className="space-y-3 mb-6">
-        {messages && messages.length > 0 ? (
-          messages.map((m: any) => (
-            <div key={m.id} className="border p-3 rounded bg-gray-50">
-              <p>{m.content}</p>
-              <span className="text-xs text-gray-400 mt-1 block">
-                {new Date(m.created_at).toLocaleTimeString('ko-KR')}
-              </span>
-            </div>
-          ))
-       ) : (
-          <p className="text-gray-400 text-center">첫 번째 질문을 입력하세요.</p>
-        )}
+      {/* Messages */}
+      <div className="flex-1 overflow-y-auto p-6">
+        <div className="max-w-2xl mx-auto space-y-4">
+          {messages && messages.length > 0 ? (
+            messages.map((m: any) => (
+              <div key={m.id} className={`flex ${m.role === 'user' ? 'justify-end' : 'justify-start'}`}>
+                <div className={`max-w-[80%] px-4 py-3 text-sm ${m.role === 'user' ? 'bubble-user' : 'bubble-other'}`}>
+                  <p>{m.content}</p>
+                  <span className="text-[0.65rem] opacity-50 mt-1.5 block">
+                    {new Date(m.created_at).toLocaleTimeString('ko-KR', { hour: '2-digit', minute: '2-digit' })}
+                  </span>
+                </div>
+              </div>
+            ))
+          ) : (
+            <p className="text-center text-gray-400 py-12">첫 질문을 입력하세요</p>
+          )}
+        </div>
       </div>
 
-      <ChatInput conversationId={conversation!.id} />
-    </main>
+      {/* Input */}
+      <div className="border-t bg-card p-4">
+        <div className="max-w-2xl mx-auto">
+          <ChatInput conversationId={conversation!.id} />
+        </div>
+      </div>
+    </div>
   )
 }
